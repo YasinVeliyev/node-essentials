@@ -1,4 +1,5 @@
 const fs = require("fs").promises
+const path = require("node:path")
 
 async function main() {
     const salesFiles = await findSalesFiles("stores");
@@ -13,10 +14,10 @@ async function findSalesFiles(folderName) {
         const items = await fs.readdir(folderName, { withFileTypes: true });
         for (item of items) {
             if (item.isDirectory()) {
-                await findFiles(`${folderName}/${item.name}`)
+                await findFiles(path.join(folderName, item.name))
             } else {
                 if (item.name === "sales.json") {
-                    salesFiles.push(`${folderName}/${item.name}`);
+                    salesFiles.push(path.join(folderName, item.name));
                 }
             }
         }
